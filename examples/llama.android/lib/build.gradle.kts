@@ -1,13 +1,13 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    //alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
     namespace = "com.arm.aichat"
-    compileSdk = 36
+    compileSdk { version = release(37) { minorApiLevel = 1 } }
 
-    ndkVersion = "29.0.13113456"
+    ndkVersion = "30.0.14904198"
 
     defaultConfig {
         minSdk = 33
@@ -16,7 +16,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         ndk {
-             abiFilters += listOf("arm64-v8a", "x86_64")
+             abiFilters += listOf("arm64-v8a")
         }
         externalNativeBuild {
             cmake {
@@ -35,6 +35,9 @@ android {
                 arguments += "-DGGML_LLAMAFILE=OFF"
             }
         }
+        defaultConfig.externalNativeBuild.cmake.arguments += listOf(
+            "-DCMAKE_INSTALL_PREFIX=${projectDir}"
+        )
         aarMetadata {
             minCompileSdk = 35
         }
@@ -42,7 +45,7 @@ android {
     externalNativeBuild {
         cmake {
             path("src/main/cpp/CMakeLists.txt")
-            version = "3.31.6"
+            version = "4.3.0"
         }
     }
     compileOptions {
@@ -50,8 +53,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin {
-        jvmToolchain(17)
-
         compileOptions {
             targetCompatibility = JavaVersion.VERSION_17
         }

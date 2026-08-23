@@ -1,14 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    //alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
     namespace = "com.example.llama"
-    compileSdk = 36
-
+    compileSdk { version = release(37) { minorApiLevel = 1 } }
+    
     defaultConfig {
-        applicationId = "com.example.llama.aichat"
+        applicationId = "com.estrin217.llama.aichat"
 
         minSdk = 33
         targetSdk = 36
@@ -27,7 +27,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }

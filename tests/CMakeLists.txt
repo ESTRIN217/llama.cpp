@@ -116,8 +116,6 @@ function(llama_build_and_test source)
     set_property(TEST ${TEST_TARGET} PROPERTY LABELS ${LLAMA_TEST_LABEL})
 endfunction()
 
-llama_build_and_test(test-unicode.cpp)
-
 # build test-tokenizer-0 target once and add many tests
 llama_build(test-tokenizer-0.cpp)
 
@@ -154,6 +152,7 @@ llama_build(test-recurrent-state-rollback.cpp)
 
 if (NOT WIN32 OR NOT BUILD_SHARED_LIBS)
     # these tests are disabled on Windows because they use internal functions not exported with LLAMA_API (when building with shared libraries)
+    llama_build_and_test(test-unicode.cpp)
     llama_build_and_test(test-sampling.cpp)
     llama_build_and_test(test-reasoning-budget.cpp)
     llama_build_and_test(test-grammar-parser.cpp)
@@ -227,6 +226,15 @@ if (NOT WIN32 OR NOT BUILD_SHARED_LIBS)
         ARGS -m "${MODEL_DIR}/nemotron_h-dense.gguf"
     )
     set_tests_properties(test-recurrent-state-rollback-nemotron-h PROPERTIES
+        FIXTURES_REQUIRED generate-models
+    )
+    llama_test(
+        test-recurrent-state-rollback
+        NAME test-recurrent-state-rollback-dsv4
+        LABEL main
+        ARGS -m "${MODEL_DIR}/deepseek4-moe.gguf"
+    )
+    set_tests_properties(test-recurrent-state-rollback-dsv4 PROPERTIES
         FIXTURES_REQUIRED generate-models
     )
 endif()
